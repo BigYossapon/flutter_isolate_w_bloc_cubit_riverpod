@@ -11,7 +11,7 @@ class IsoCubit extends Cubit<IsoStates> {
 
   void IsocountEvent() async {
     final ReceivePort receivePort = ReceivePort();
-
+    emit(IsoLoadings());
     try {
       await Isolate.spawn(
           runHeavyTaskIWithIsolate, [receivePort.sendPort, 4000000000]);
