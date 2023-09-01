@@ -1,0 +1,11 @@
+นำไฟล์ worker.js ไปไว้ใน web folder
+ตั้งโค้ดทั้งหมดนี้ใน main
+  if (kIsWeb) {
+    final bool loaded = await JsIsolatedWorker().importScripts(['function.js']); // ชื่อไฟล์ที่จะใช้
+    print(loaded);
+  }
+
+  WidgetsFlutterBinding.ensureInitialized();
+  workerManager.log = true;
+  await workerManager.init();
+หลังจากนั้น call function ในไฟล์ทันที
