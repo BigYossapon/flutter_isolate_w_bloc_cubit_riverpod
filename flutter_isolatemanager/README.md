@@ -27,7 +27,19 @@
 
 </p>
 ## Liblary
-isolate worker จำเป็นต้องทำแยก function ทางฝั่งเว็บกับ อื่น ตามตัวอย่างเลย
+dev_dependencies:
+  js:
+web
+dart compile js worker.dart -o worker.js -O4 ปรับ terminal ให้เป้น path ไฟล์ที่จะเจน
+ทำฟังชันก์ด้วย .dart ตัวอย่างอยู่ใน utile  เพิ่มfunction เข้าไป
+เจนเสดนำไปเพิ่มเข้าใน web
+หลังเสร็จให้ทำการ รันคำสั่งด้านบนใน terminal 
+ดูตัวอย่างการใช้งานได้ทั้งแบบnative และ web ได้ใน home_page.dart
+
+
+
+
+isolate manager จำเป็นต้องทำแยก function ทางฝั่งเว็บกับ อื่น ตามตัวอย่างเลย
 โดยต้องนำไฟล์ worker.js ไปใส่ไฟล์ไว้ใน web file และสร้าง function ไฟล์เป็น namefunction.js
 
 

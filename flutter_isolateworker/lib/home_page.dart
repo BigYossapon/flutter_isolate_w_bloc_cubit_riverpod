@@ -27,36 +27,6 @@ class MyHomePage extends ConsumerStatefulWidget {
   ConsumerState<MyHomePage> createState() => _MyHomePageState();
 }
 
-Future<int> runHeavyTaskIWithoutIsolaterun(int args) async {
-  int value = 0;
-  for (var i = 0; i < args; i++) {
-    value += i;
-  }
-
-  return value;
-}
-
-init() {
-  final isolateManager1 = IsolateManager.create(
-    isDebug: true,
-    runHeavyTaskIWithtIsolatemanager,
-    workerName: 'fibonacci',
-    concurrent: 2,
-  );
-}
-
-@pragma('vm:entry-point')
-Future<int> runHeavyTaskIWithtIsolatemanager(List<dynamic> args) async {
-  int value = 0;
-  // final channel = IsolateManagerController(args);
-  // channel.onIsolateMessage.listen((event) {});
-  for (var i = 0; i < args[0]; i++) {
-    value += i;
-  }
-  print(value);
-  return value;
-}
-
 Future<int> runHeavyTaskIWithtworkermanager(List<dynamic> args) async {
   int value = 0;
   for (var i = 0; i < args[0]; i++) {
@@ -73,58 +43,6 @@ int runHeavyTaskIWithtIsolateworkers(List<int> args) {
   }
   print('==============================');
   return value;
-}
-
-Future<int> runHeavyTaskIWithoutIsolatespawncommunication(
-    List<dynamic> args) async {
-  var mainToIsolateStream = ReceivePort();
-  var isolateToMainStream = args[0];
-
-  int value = 0;
-  for (var i = 0; i < args[1]; i++) {
-    value += i;
-  }
-  isolateToMainStream.send(mainToIsolateStream.sendPort);
-  mainToIsolateStream.listen((data) {
-    print('[mainToIsolateStream] $data');
-    //exit(0);
-  });
-  isolateToMainStream.send('This is from myIsolate()');
-  return value;
-}
-
-Future<dynamic> myMaininitIsolate() async {
-  Completer completer = Completer<SendPort>();
-  var isolateToMainStream = ReceivePort();
-
-  isolateToMainStream.listen((data) {
-    if (data is SendPort) {
-      var mainToIsolateStream = data;
-      completer.complete(mainToIsolateStream);
-    } else {
-      print('[isolateToMainStream] $data');
-    }
-  });
-  // await Isolate.spawn(myIsolate, isolateToMainStream.sendPort);
-  //await Isolate.spawn(myIsolate, isolateToMainStream.sendPort);
-  return completer.future;
-}
-
-void myIsolate(SendPort isolateToMainStream) {
-  var mainToIsolateStream = ReceivePort();
-  runHeavyTaskIWithoutIsolaterun(4000000000);
-  isolateToMainStream.send(mainToIsolateStream.sendPort);
-
-  mainToIsolateStream.listen((data) {
-    print('[mainToIsolateStream] $data');
-    //exit(0);
-  });
-
-  isolateToMainStream.send('This is from myIsolate()');
-}
-
-Future<int> computeFactorial(int n) async {
-  return await compute(runHeavyTaskIWithoutIsolates, 4000000000);
 }
 
 int runHeavyTaskIWithoutIsolates(int values) {
@@ -190,61 +108,6 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                   setState(() {});
                 },
               ),
-              Text(values_worker_manager.toString()),
-              const SizedBox(height: 50),
-              ElevatedButton(
-                  child: const Text(
-                      'Run Heavy Task - with worker manager not true '),
-                  onPressed: () async {
-                    Cancelable<dynamic> cancelable =
-                        workerManager.executeWithPort<dynamic, String>(
-                      (SendPort sendPort) async {
-                        // Your CPU-intensive function here
-                        await runHeavyTaskIWithtworkermanager([4000000000])
-                            .then((value) {
-                          setState(() {
-                            values_worker_manager = value;
-                          });
-                        });
-                        // Use sendPort.send(message) to communicate with the main isolate
-                      },
-                      onMessage: (String message) {
-                        // Handle the received message in the main isolate
-                      },
-                    );
-                  }),
-              Text(values_iso_manager.toString()),
-              const SizedBox(height: 50),
-              ElevatedButton(
-                child: const Text('Run Heavy Task - with isolate manager'),
-                onPressed: () async {
-                  final isolateManager = IsolateManager.create(
-                      runHeavyTaskIWithtIsolatemanager,
-                      workerName: 'runHeavyTaskIWithtIsolatemanager',
-                      isDebug: true,
-                      concurrent: 1);
-                  final result =
-                      await isolateManager.compute([4000000000]).then((value) {
-                    setState(() {
-                      values_iso_manager = value;
-                    });
-                  });
-                },
-              ),
-              Text(values_iso_manager2.toString()),
-              const SizedBox(height: 50),
-              ElevatedButton(
-                child: const Text('Run Heavy Task - with isolate manager'),
-                onPressed: () async {
-                  final isolateManager2 = IsolateManager.create(
-                      runHeavyTaskIWithtIsolatemanager,
-                      workerName: 'runHeavyTaskIWithtIsolatemanager',
-                      isDebug: true,
-                      concurrent: 1);
-                  isolateManager2.compute([40000000000]);
-                  isolateManager2.sendMessage(['fdgdsgds']);
-                },
-              ),
               Text(values_iso_worker.toString()),
               const SizedBox(height: 50),
               ElevatedButton(
@@ -272,22 +135,26 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
 
                     await WorkerDelegator()
                         .importScripts(const <String>['function.js']);
-
-                    print(await WorkerDelegator().run(
+                    await WorkerDelegator().run(
                         'runHeavyTaskIWithtIsolateworkers',
-                        [4000000000, 100000000]));
+                        [4000000000]).then((value) {
+                      setState(() {
+                        values_iso_worker = value;
+                      });
+                    });
+                    print(await WorkerDelegator()
+                        .run('runHeavyTaskIWithtIsolateworkers', [4000000000]));
                   } else if (kIsWeb) {
                     print('web');
                     JsIsolatedWorker().run(
                         functionName: ['runHeavyTaskIWithtIsolateworkers'],
-                        arguments: [4000000000, 100000000]).then((value) {
+                        arguments: [4000000000]).then((value) {
                       print(value);
                       JsIsolatedWorker().close();
                       setState(() {
                         values_iso_worker = value;
                       });
                     });
-                    // print('fdsfdsfdsf' + values_iso_worker.toString());
                   } else {
                     print('mobile');
                     await IsolatedWorker()
@@ -302,73 +169,6 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                     });
 
                     //print(tsst.toString());
-                  }
-                },
-              ),
-              Text(values1.toString()),
-              const SizedBox(height: 50),
-              ElevatedButton(
-                child: const Text('Run Heavy Task - with compute'),
-                onPressed: () async {
-                  //computeFactorial(4);
-                  //compute จำเป็นต้อง อยู่นอก state เลย
-                  final data =
-                      await compute(runHeavyTaskIWithoutIsolates, 4000000000);
-                  values1 = data;
-                  print(data);
-                  setState(() {});
-                },
-              ),
-              Text(values2.toString()),
-              const SizedBox(height: 50),
-              ElevatedButton(
-                child: const Text('Run Heavy Task - with isolate.run'),
-                onPressed: () async {
-                  //computeFactorial(4);
-                  //compute จำเป็นต้อง อยู่นอก state เลย
-                  try {
-                    final data = await Isolate.run(() async {
-                      return runHeavyTaskIWithoutIsolaterun(4000000000);
-                      // int value = 0;
-                      // for (var i = 0; i < 40000000; i++) {
-                      //   value += i;
-                      // }
-
-                      // values = value;
-                      // return value;
-                    });
-                    values2 = data;
-                    setState(() {});
-                    // runHeavyTaskIWithoutIsolates(40000000));
-                    print(data);
-                  } on StateError catch (e, s) {
-                    print(e.message);
-                  }
-
-                  // final data = await Isolate.run(runHeavyTaskIWithoutIsolaterun);
-                  // print(data);
-
-                  //print(data);
-                },
-              ),
-              Text(values2.toString()),
-              const SizedBox(height: 50),
-              ElevatedButton(
-                child: const Text(
-                    'Run Heavy Task - with isolate.spawn communication'),
-                onPressed: () async {
-                  var mainToIsolateStream = await myMaininitIsolate();
-                  mainToIsolateStream.send('This is from main() start ');
-                },
-              ),
-              BlocBuilder<IsoBloc, IsoState>(
-                builder: (context, state) {
-                  if (state is IsoLoading) {
-                    return const CircularProgressIndicator();
-                  } else if (state is IsoLoaded) {
-                    return Text('bloc example: ${state.value}');
-                  } else {
-                    return const Text('');
                   }
                 },
               ),

@@ -1,0 +1,5 @@
+2023/09/04-17:32:42.148 a203 Reusing MANIFEST /private/var/folders/vt/zwkkjs0s3s3djf4zml635tgc0000gn/T/flutter_tools.cJkx6X/flutter_tools_chrome_device.PBiPox/Default/shared_proto_db/MANIFEST-000001
+2023/09/04-17:32:42.149 a203 Recovering log #4
+2023/09/04-17:32:42.149 a203 (ignoring error) /private/var/folders/vt/zwkkjs0s3s3djf4zml635tgc0000gn/T/flutter_tools.cJkx6X/flutter_tools_chrome_device.PBiPox/Default/shared_proto_db/000004.log: dropping 304 bytes; Corruption: missing start of fragmented record(2)
+2023/09/04-17:32:42.149 a203 Reusing old log /private/var/folders/vt/zwkkjs0s3s3djf4zml635tgc0000gn/T/flutter_tools.cJkx6X/flutter_tools_chrome_device.PBiPox/Default/shared_proto_db/000004.log 
+2023/09/04-17:32:42.150 a203 Delete type=0 #3

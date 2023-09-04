@@ -12,14 +12,11 @@ import 'cubit/iso_cubit.dart';
 import 'home_page.dart';
 
 void main() async {
-  if (kIsWeb) {
-    final bool loaded = await JsIsolatedWorker().importScripts(['function.js']);
-    print(loaded);
-  }
+  //use when command jsIsolateWorker import file function.js path
+  await JsIsolatedWorker().importScripts(['function.js']);
 
   WidgetsFlutterBinding.ensureInitialized();
-  workerManager.log = true;
-  await workerManager.init();
+
   runApp(ProviderScope(child: const MyApp()));
 }
 

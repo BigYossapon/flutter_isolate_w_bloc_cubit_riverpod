@@ -27,6 +27,10 @@
 
 </p>
 ## Liblary
+setup worker.js
+ตั้งไฟล์เพื่อ function.js
+ตั้งค่าหน้า main
+และตัวอย่างการใช้
 isolate worker จำเป็นต้องทำแยก function ทางฝั่งเว็บกับ อื่น ตามตัวอย่างเลย
 โดยต้องนำไฟล์ worker.js ไปใส่ไฟล์ไว้ใน web file และสร้าง function ไฟล์เป็น namefunction.js
 

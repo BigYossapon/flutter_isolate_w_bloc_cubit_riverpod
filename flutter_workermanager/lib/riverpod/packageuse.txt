@@ -1,0 +1,4 @@
+นำโค้ดใน runHeavyTaskIWithtIsolatemanager
+มาทำไฟล์ใหม่และ gen code และแก้ตรง function  command : dart compile js worker.dart -o worker.js -O4
+หลังเจนเสร็จนำไปใส่ไว้ที่ไฟล์ web และเพิ่มชื่อไฟล์ที่ workername 
+ถ้าต้องการ communicate ให้ใช้ isoate.createownisolate
